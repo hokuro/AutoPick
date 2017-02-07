@@ -1,0 +1,21 @@
+[
+{
+    "modid": "AutoPic",
+    "name": "Item Auto Pick Up",
+    "description": "To set up or not picked up or pick up a particular item . ",
+    "mcversion": "$mcversion",
+    "version": "$version",
+    "url": "",
+    "updateUrl": "",
+    "authors": [
+        "OhoNou"
+    ],
+    "credits": "",
+    "logoFile": "/autopick.png",
+    "screenshots": [
+    ],
+    "parent":"",
+    "dependencies": [
+    ]
+}
+]

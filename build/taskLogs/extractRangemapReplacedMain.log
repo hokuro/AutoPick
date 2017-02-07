@@ -1,0 +1,12 @@
+Symbol range map extraction starting
+Processing 10 files
+processing basashi\autopic\client\ClientProxy.java
+processing basashi\autopic\config\ConfigProperty.java
+processing basashi\autopic\config\ConfigValue.java
+processing basashi\autopic\config\CtlConfig.java
+processing basashi\autopic\config\CustomConfiguration.java
+processing basashi\autopic\core\CommonProxy.java
+processing basashi\autopic\core\ModCommon.java
+processing basashi\autopic\core\Mod_AutoPic.java
+processing basashi\autopic\core\log\ModLog.java
+processing basashi\autopic\event\EventHook.java
