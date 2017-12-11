@@ -12,6 +12,7 @@ import basashi.autopic.core.ModCommon;
 import basashi.autopic.core.log.ModLog;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -32,6 +33,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
+import net.minecraftforge.fml.common.network.handshake.NetworkDispatcher;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -84,8 +86,8 @@ public class EventHook{
 
 		// ワールド情報、プレイヤー情報を取得
 		Minecraft minecraft = FMLClientHandler.instance().getClient();
-		World world = minecraft.theWorld;
-		EntityPlayer player = minecraft.thePlayer;
+		World world = minecraft.world;
+		EntityPlayerSP player = minecraft.player;
 		if (null == player) {
 			return;
 		}
@@ -107,7 +109,9 @@ public class EventHook{
 					if(list != null){
 						Packet<INetHandlerPlayServer> p = new CPacketCustomPayload(ModCommon.CHANEL_NAME,
 								new PacketBuffer(Unpooled.wrappedBuffer(new byte[1])));
-						minecraft.getNetHandler().addToSendQueue(p);
+
+						minecraft.getConnection().sendPacket(p);
+						NetworkDispatcher disp = NetworkDispatcher.get(player.connection.getNetworkManager());
 						this.packetEnableTime = (System.currentTimeMillis() + 200L);
 					}
 				}
@@ -128,7 +132,7 @@ public class EventHook{
 				&& (null == minecraft.currentScreen)) {
 			if (this.changeflag <= 0){
 				ConfigValue.DefaultMode = ((ConfigValue.DefaultMode++)>1)?0:ConfigValue.DefaultMode++;
-				player.addChatComponentMessage(new TextComponentString("AutoPic " + ((ConfigValue.DefaultMode==0) ? "OFF" :((ConfigValue.DefaultMode==1)? "Ignore List": "Allow List"))));
+				player.sendStatusMessage(new TextComponentString("AutoPic " + ((ConfigValue.DefaultMode==0) ? "OFF" :((ConfigValue.DefaultMode==1)? "Ignore List": "Allow List"))),true);
 				this.changeflag = 2;
 			}else if (this.changeflag >= 1){
 				this.changeflag--;
@@ -147,7 +151,7 @@ public class EventHook{
 					if (!"".equals(ConfigValue.itemlist)){
 						itemList = ConfigValue.itemlist.split(",");
 					}
-					player.addChatComponentMessage(new TextComponentString("AutoPic " + ((res) ? "Add List ":"Remove List")+ itm.getItem().getRegistryName()));
+					player.sendStatusMessage(new TextComponentString("AutoPic " + ((res) ? "Add List ":"Remove List")+ itm.getItem().getRegistryName()),true);
 				}
 				this.changeflag2 = 2;
 			}else if ( this.changeflag2 >= 1){
@@ -159,7 +163,7 @@ public class EventHook{
 	@SubscribeEvent
 	public void onServerPacket(ServerCustomPacketEvent event) {
 		//ModLog.log().debug("start");
-		EntityPlayer player = ((NetHandlerPlayServer) event.getHandler()).playerEntity;
+		EntityPlayer player = ((NetHandlerPlayServer) event.getHandler()).player;
 		if (null == player) {
 			return;
 		}
@@ -181,7 +185,7 @@ public class EventHook{
 		if (null == server) {
 			return;
 		}
-		World world = server.worldServerForDimension(player.dimension);
+		World world = server.getWorld(player.dimension);
 		List<Entity> list = getEntitiesInCircumference(world, player);
 		if (null == list) {
 			return;
@@ -231,7 +235,7 @@ public class EventHook{
 					}
 					if (allow) {
 						ret.add(e);
-						ModLog.log().debug("add list:" +((EntityItem) e).getEntityItem().getItem().getRegistryName());
+						ModLog.log().debug("add list:" +((EntityItem) e).getItem().getItem().getRegistryName());
 					}
 				}
 			}
@@ -251,7 +255,7 @@ public class EventHook{
 				// 無視リストが空なので必ず拾う
 				if (itemList == null){return true;}
 					// 一致する場合無視、一致しない場合許可
-					if(isIdInList(target.getEntityItem().getItem().getRegistryName().toString())) return false;
+					if(isIdInList(target.getItem().getItem().getRegistryName().toString())) return false;
 					else return true;
 				}
 				// リスト外のアイテムを無視
@@ -259,7 +263,7 @@ public class EventHook{
 				// 無視リストが空なので必ず無視
 				if (itemList == null){return false;}
 				// 一致しない場合無視、一致する場合許可
-				if(isIdInList(target.getEntityItem().getItem().getRegistryName().toString())) return true;
+				if(isIdInList(target.getItem().getItem().getRegistryName().toString())) return true;
 				else return false;
 			}
 		}
