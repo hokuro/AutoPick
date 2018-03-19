@@ -218,7 +218,7 @@ public class EventHook{
 		if ( ConfigValue.DefaultMode != 0){
 			// あたり判定に引っかかったエンティティを取得
 			List<?> list = world.getEntitiesWithinAABBExcludingEntity(player,
-					player.getEntityBoundingBox().expand(ConfigValue.horizontal, ConfigValue.vertical, ConfigValue.horizontal));
+					player.getEntityBoundingBox().expand(ConfigValue.horizontal, ConfigValue.vertical, ConfigValue.horizontal).expand(-1*ConfigValue.horizontal, -1*ConfigValue.vertical, -1*ConfigValue.horizontal));
 			if ((null == list) || (list.isEmpty())) {
 				return null;
 			}
