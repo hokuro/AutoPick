@@ -132,7 +132,7 @@ public class EventHook{
 				&& (null == minecraft.currentScreen)) {
 			if (this.changeflag <= 0){
 				ConfigValue.DefaultMode = ((ConfigValue.DefaultMode++)>1)?0:ConfigValue.DefaultMode++;
-				player.sendStatusMessage(new TextComponentString("AutoPic " + ((ConfigValue.DefaultMode==0) ? "OFF" :((ConfigValue.DefaultMode==1)? "Ignore List": "Allow List"))),true);
+				player.sendStatusMessage(new TextComponentString("AutoPic " + ((ConfigValue.DefaultMode==0) ? "OFF" :((ConfigValue.DefaultMode==1)? "Ignore List": "Allow List"))),false);
 				this.changeflag = 2;
 			}else if (this.changeflag >= 1){
 				this.changeflag--;
@@ -151,7 +151,7 @@ public class EventHook{
 					if (!"".equals(ConfigValue.itemlist)){
 						itemList = ConfigValue.itemlist.split(",");
 					}
-					player.sendStatusMessage(new TextComponentString("AutoPic " + ((res) ? "Add List ":"Remove List")+ itm.getItem().getRegistryName()),true);
+					player.sendStatusMessage(new TextComponentString("AutoPic " + ((res) ? "Add List ":"Remove List")+ itm.getItem().getRegistryName()),false);
 				}
 				this.changeflag2 = 2;
 			}else if ( this.changeflag2 >= 1){
