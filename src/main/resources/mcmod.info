@@ -1,21 +1,20 @@
 [
-{
-    "modid": "AutoPic",
-    "name": "Item Auto Pick Up",
-    "description": "To set up or not picked up or pick up a particular item . ",
-    "mcversion": "$mcversion",
-    "version": "$version",
-    "url": "",
-    "updateUrl": "",
-    "authors": [
-        "OhoNou"
-    ],
-    "credits": "",
-    "logoFile": "/autopick.png",
-    "screenshots": [
-    ],
+  {
+    "description":"To set up or not picked up or pick up a particular item . ",
     "parent":"",
-    "dependencies": [
-    ]
-}
+    "logoFile":"",
+    "credits":"basashi",
+    "dependencies":[],
+    "modid":"autopic",
+    "mcversion":"$version",
+    "screenshots":[],
+    "basashi":[
+      "defeatedcrow"
+    ],
+    "name":"Item Auto Pick Up",
+    "url":"",
+    "updateUrl":"",
+    "version":"$mcversion",
+    "requiredMods":["Minecraft Forge1.12.2-14.23.3.2655+"]
+  }
 ]

@@ -6,16 +6,14 @@ This mapping 'snapshot_20171003' was designed for MC 1.12! Use at your own peril
 This mapping 'snapshot_20171003' was designed for MC 1.12! Use at your own peril.
 This mapping 'snapshot_20171003' was designed for MC 1.12! Use at your own peril.
 This mapping 'snapshot_20171003' was designed for MC 1.12! Use at your own peril.
-This mapping 'snapshot_20171003' was designed for MC 1.12! Use at your own peril.
-This mapping 'snapshot_20171003' was designed for MC 1.12! Use at your own peril.
 #################################################
-         ForgeGradle 2.3-SNAPSHOT-f49079d        
+         ForgeGradle 2.3-SNAPSHOT-4f2fe6a        
   https://github.com/MinecraftForge/ForgeGradle  
 #################################################
-               Powered by MCP unknown               
+                 Powered by MCP                  
              http://modcoderpack.com             
-         by: Searge, ProfMobius, Fesh0r,         
-         R4wk, ZeuX, IngisKahn, bspkrs           
+     by: Searge, ProfMobius, R4wk, ZeuX          
+     Fesh0r, IngisKahn, bspkrs, LexManos         
 #################################################
 :deobfCompileDummyTask
 :deobfProvidedDummyTask
@@ -31,14 +29,14 @@ This mapping 'snapshot_20171003' was designed for MC 1.12! Use at your own peril
 :mergeJars SKIPPED
 :deobfMcSRG SKIPPED
 :decompileMc SKIPPED
-:fixMcSources
+:fixMcSources SKIPPED
 :applySourcePatches
 :remapMcSources SKIPPED
 :recompileMc
 :extractNatives SKIPPED
-:getAssetIndex UP-TO-DATE
+:getAssetIndex
 :getAssets
-Current status: 871/1283   67%
+Current status: 1120/1283   87%
 :makeStart
 :setupDecompWorkspace
 :AutoPick:deobfCompileDummyTask
@@ -65,30 +63,29 @@ Current status: 871/1283   67%
 Current status: 1282/1283   99%
 :AutoPick:makeStart
 :AutoPick:setupDecompWorkspace
-:ConvenienceBox:deobfCompileDummyTask
-:ConvenienceBox:deobfProvidedDummyTask
-:ConvenienceBox:getVersionJson
-:ConvenienceBox:extractUserdev
-:ConvenienceBox:extractDependencyATs SKIPPED
-:ConvenienceBox:extractMcpData SKIPPED
-:ConvenienceBox:extractMcpMappings SKIPPED
-:ConvenienceBox:genSrgs SKIPPED
-:ConvenienceBox:downloadClient SKIPPED
-:ConvenienceBox:downloadServer SKIPPED
-:ConvenienceBox:splitServerJar SKIPPED
-:ConvenienceBox:mergeJars SKIPPED
-:ConvenienceBox:deobfMcSRG SKIPPED
-:ConvenienceBox:decompileMc SKIPPED
-:ConvenienceBox:fixMcSources SKIPPED
-:ConvenienceBox:applySourcePatches SKIPPED
-:ConvenienceBox:remapMcSources SKIPPED
-:ConvenienceBox:recompileMc SKIPPED
-:ConvenienceBox:extractNatives SKIPPED
-:ConvenienceBox:getAssetIndex UP-TO-DATE
-:ConvenienceBox:getAssets
-Current status: 1282/1283   99%
-:ConvenienceBox:makeStart
-:ConvenienceBox:setupDecompWorkspace
+:ConvenienceMechanical:deobfCompileDummyTask
+:ConvenienceMechanical:deobfProvidedDummyTask
+:ConvenienceMechanical:getVersionJson
+:ConvenienceMechanical:extractUserdev
+:ConvenienceMechanical:extractDependencyATs SKIPPED
+:ConvenienceMechanical:extractMcpData SKIPPED
+:ConvenienceMechanical:extractMcpMappings SKIPPED
+:ConvenienceMechanical:genSrgs SKIPPED
+:ConvenienceMechanical:downloadClient SKIPPED
+:ConvenienceMechanical:downloadServer SKIPPED
+:ConvenienceMechanical:splitServerJar SKIPPED
+:ConvenienceMechanical:mergeJars SKIPPED
+:ConvenienceMechanical:deobfMcSRG SKIPPED
+:ConvenienceMechanical:decompileMc SKIPPED
+:ConvenienceMechanical:fixMcSources SKIPPED
+:ConvenienceMechanical:applySourcePatches SKIPPED
+:ConvenienceMechanical:remapMcSources SKIPPED
+:ConvenienceMechanical:recompileMc SKIPPED
+:ConvenienceMechanical:extractNatives SKIPPED
+:ConvenienceMechanical:getAssetIndex UP-TO-DATE
+:ConvenienceMechanical:getAssets
+:ConvenienceMechanical:makeStart
+:ConvenienceMechanical:setupDecompWorkspace
 :DiningFurniture:deobfCompileDummyTask
 :DiningFurniture:deobfProvidedDummyTask
 :DiningFurniture:getVersionJson
@@ -135,29 +132,6 @@ Current status: 1282/1283   99%
 :Dools:getAssets
 :Dools:makeStart
 :Dools:setupDecompWorkspace
-:ERM:deobfCompileDummyTask
-:ERM:deobfProvidedDummyTask
-:ERM:getVersionJson
-:ERM:extractUserdev
-:ERM:extractDependencyATs SKIPPED
-:ERM:extractMcpData SKIPPED
-:ERM:extractMcpMappings SKIPPED
-:ERM:genSrgs SKIPPED
-:ERM:downloadClient SKIPPED
-:ERM:downloadServer SKIPPED
-:ERM:splitServerJar SKIPPED
-:ERM:mergeJars SKIPPED
-:ERM:deobfMcSRG SKIPPED
-:ERM:decompileMc SKIPPED
-:ERM:fixMcSources SKIPPED
-:ERM:applySourcePatches SKIPPED
-:ERM:remapMcSources SKIPPED
-:ERM:recompileMc SKIPPED
-:ERM:extractNatives SKIPPED
-:ERM:getAssetIndex UP-TO-DATE
-:ERM:getAssets
-:ERM:makeStart
-:ERM:setupDecompWorkspace
 :ExBombs:deobfCompileDummyTask
 :ExBombs:deobfProvidedDummyTask
 :ExBombs:getVersionJson
@@ -179,6 +153,7 @@ Current status: 1282/1283   99%
 :ExBombs:extractNatives SKIPPED
 :ExBombs:getAssetIndex UP-TO-DATE
 :ExBombs:getAssets
+Current status: 1282/1283   99%
 :ExBombs:makeStart
 :ExBombs:setupDecompWorkspace
 :ExchangeBlock:deobfCompileDummyTask
@@ -202,6 +177,7 @@ Current status: 1282/1283   99%
 :ExchangeBlock:extractNatives SKIPPED
 :ExchangeBlock:getAssetIndex UP-TO-DATE
 :ExchangeBlock:getAssets
+Current status: 1282/1283   99%
 :ExchangeBlock:makeStart
 :ExchangeBlock:setupDecompWorkspace
 :HPViewer:deobfCompileDummyTask
@@ -250,30 +226,7 @@ Current status: 1282/1283   99%
 :HavestAll:getAssets
 :HavestAll:makeStart
 :HavestAll:setupDecompWorkspace
-:TemperedGlass:deobfCompileDummyTask
-:TemperedGlass:deobfProvidedDummyTask
-:TemperedGlass:getVersionJson
-:TemperedGlass:extractUserdev
-:TemperedGlass:extractDependencyATs SKIPPED
-:TemperedGlass:extractMcpData SKIPPED
-:TemperedGlass:extractMcpMappings SKIPPED
-:TemperedGlass:genSrgs SKIPPED
-:TemperedGlass:downloadClient SKIPPED
-:TemperedGlass:downloadServer SKIPPED
-:TemperedGlass:splitServerJar SKIPPED
-:TemperedGlass:mergeJars SKIPPED
-:TemperedGlass:deobfMcSRG SKIPPED
-:TemperedGlass:decompileMc SKIPPED
-:TemperedGlass:fixMcSources SKIPPED
-:TemperedGlass:applySourcePatches SKIPPED
-:TemperedGlass:remapMcSources SKIPPED
-:TemperedGlass:recompileMc SKIPPED
-:TemperedGlass:extractNatives SKIPPED
-:TemperedGlass:getAssetIndex UP-TO-DATE
-:TemperedGlass:getAssets
-:TemperedGlass:makeStart
-:TemperedGlass:setupDecompWorkspace
 
 BUILD SUCCESSFUL
 
-Total time: 4 mins 0.267 secs
+Total time: 3 mins 9.255 secs

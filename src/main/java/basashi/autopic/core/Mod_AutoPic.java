@@ -14,7 +14,10 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.FMLEventChannel;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
-@Mod(modid = ModCommon.MOD_ID, name = ModCommon.MOD_NAME, version = ModCommon.MOD_VERSION)
+@Mod(modid = ModCommon.MOD_ID,
+     name = ModCommon.MOD_NAME,
+     version = ModCommon.MOD_VERSION,
+     acceptedMinecraftVersions = ModCommon.MOD_ACCEPTED_MC_VERSIONS)
 public class Mod_AutoPic {
 	@Mod.Instance(ModCommon.MOD_ID)
 	public static Mod_AutoPic instance;
