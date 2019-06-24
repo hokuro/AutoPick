@@ -29,8 +29,6 @@ public final class ModCommon {
 	// コンフィグリロード間隔
 	public static final long MOD_CONFIG_RELOAD = 500L;
 
-	// コンフィグ カテゴリー general
-	public static final String MOD_CONFIG_CAT_GENELAL = "general";
 
 	public static final String CHANEL_NAME = "AutoPickUpMod";
 }

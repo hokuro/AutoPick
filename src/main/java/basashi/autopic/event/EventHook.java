@@ -2,15 +2,12 @@ package basashi.autopic.event;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
-import basashi.autopic.client.ClientProxy;
 import basashi.autopic.config.ConfigValue;
 import basashi.autopic.config.CtlConfig;
-import basashi.autopic.core.ModCommon;
+import basashi.autopic.core.CommonProxy;
 import basashi.autopic.core.log.ModLog;
-import io.netty.buffer.Unpooled;
+import basashi.autopic.network.MessageHundler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
@@ -18,24 +15,15 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraft.network.Packet;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.INetHandlerPlayServer;
-import net.minecraft.network.play.client.CPacketCustomPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
-import net.minecraftforge.fml.common.network.handshake.NetworkDispatcher;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EventHook{
 	public static final EventHook instance = new EventHook();
@@ -46,17 +34,21 @@ public class EventHook{
 	private int changeflag=0;
 	private int changeflag2=0;
 	private int count;
-	private static final long packetWaitMilliSec = 200L;
 	private String[] itemList;
 
-	private static final BlockingQueue<EntityPlayer> _serverPacket = new LinkedBlockingQueue();
+	private static EntityPlayer player = null;
 
 	private EventHook(){
 		reloadkye();
 		itemList = null;
-		if (!"".equals(ConfigValue.itemlist)){
-			itemList = ConfigValue.itemlist.split(",");
+
+		if (!"".equals(ConfigValue.ItemLists())){
+			itemList = ConfigValue.ItemLists().split(",");
 		}
+	}
+
+	public static void setEntityPlayer(EntityPlayer pl){
+		player = pl;
 	}
 
 	private void reloadkye(){
@@ -70,14 +62,14 @@ public class EventHook{
 	{
 		ModLog.log().debug("event");
 		EntityItem etitem = event.getItem();
-		if (ConfigValue.DefaultMode != 0){
+		if (ConfigValue.DefaultMode() != 0){
 			if(!this.CheckPickItem(etitem)){
 				etitem.setPickupDelay(100);
 			}
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public void tickEvent(TickEvent.ClientTickEvent event) {
 		if (!TickEvent.Phase.END.equals(event.phase)) {
@@ -85,7 +77,7 @@ public class EventHook{
 		}
 
 		// ワールド情報、プレイヤー情報を取得
-		Minecraft minecraft = FMLClientHandler.instance().getClient();
+		Minecraft minecraft = Minecraft.getInstance();
 		World world = minecraft.world;
 		EntityPlayerSP player = minecraft.player;
 		if (null == player) {
@@ -96,23 +88,18 @@ public class EventHook{
 		if (CtlConfig.reloadConfig()) {
 			reloadkye();
 			itemList = null;
-			if (!"".equals(ConfigValue.itemlist)){
-				itemList = ConfigValue.itemlist.split(",");
+			if (!"".equals(ConfigValue.ItemLists())){
+				itemList = ConfigValue.ItemLists().split(",");
 			}
 		}
 
 		if (null != world) {
 			if (System.currentTimeMillis() >= this.packetEnableTime) {
-				if (player.getHealth() > 0.0F && ConfigValue.DefaultMode != 0 && countflag){
+				if (player.getHealth() > 0.0F && ConfigValue.GENERAL.DefaultMode.get() != 0 && countflag){
 					// あたり判定に引っかかったアイテムを取得
 					List<Entity> list = getEntitiesInCircumference(world, player);
 					if(list != null){
-						Packet<INetHandlerPlayServer> p = new CPacketCustomPayload(ModCommon.CHANEL_NAME,
-								new PacketBuffer(Unpooled.wrappedBuffer(new byte[1])));
-
-						minecraft.getConnection().sendPacket(p);
-						NetworkDispatcher disp = NetworkDispatcher.get(player.connection.getNetworkManager());
-						this.packetEnableTime = (System.currentTimeMillis() + 200L);
+						MessageHundler.send_MSG_GetItem();
 					}
 				}
 			}
@@ -128,11 +115,14 @@ public class EventHook{
 		}
 
 		// モード変更キー押下
-		if (ClientProxy.Press_Key_Enable()
+		if (CommonProxy.Client.Press_Key_Enable()
 				&& (null == minecraft.currentScreen)) {
 			if (this.changeflag <= 0){
-				ConfigValue.DefaultMode = ((ConfigValue.DefaultMode++)>1)?0:ConfigValue.DefaultMode++;
-				player.sendStatusMessage(new TextComponentString("AutoPic " + ((ConfigValue.DefaultMode==0) ? "OFF" :((ConfigValue.DefaultMode==1)? "Ignore List": "Allow List"))),false);
+				if (ConfigValue.DefaultMode() == 0){
+					ConfigValue.setDefaultMode(1);
+				}else{
+					ConfigValue.setDefaultMode(0);
+				}
 				this.changeflag = 2;
 			}else if (this.changeflag >= 1){
 				this.changeflag--;
@@ -140,16 +130,15 @@ public class EventHook{
 		}
 
 		// モード変更キー押下
-		if (ClientProxy.Press_Key_Regist()
+		if (CommonProxy.Client.Press_Key_Regist()
 				&& (null == minecraft.currentScreen)){
 			if (this.changeflag2 <= 0){
 				ItemStack itm = player.inventory.getCurrentItem();
 				if ( itm != null ){
-					boolean res = ConfigValue.AddOrRemoveItem(itm.getItem().getRegistryName().toString());
-					CtlConfig.saveConfig();
+					boolean res = ConfigValue.GENERAL.AddOrRemoveItem(itm.getItem().getRegistryName());
 					itemList = null;
-					if (!"".equals(ConfigValue.itemlist)){
-						itemList = ConfigValue.itemlist.split(",");
+					if (!"".equals(ConfigValue.ItemLists())){
+						itemList = ConfigValue.ItemLists().split(",");
 					}
 					player.sendStatusMessage(new TextComponentString("AutoPic " + ((res) ? "Add List ":"Remove List")+ itm.getItem().getRegistryName()),false);
 				}
@@ -160,16 +149,16 @@ public class EventHook{
 		}
 	}
 
-	@SubscribeEvent
-	public void onServerPacket(ServerCustomPacketEvent event) {
-		//ModLog.log().debug("start");
-		EntityPlayer player = ((NetHandlerPlayServer) event.getHandler()).player;
-		if (null == player) {
-			return;
-		}
-		_serverPacket.offer(player);
-		//ModLog.log().debug("end");
-	}
+//	@SubscribeEvent
+//	public void onServerPacket(ServerCustomPacketEvent event) {
+//		//ModLog.log().debug("start");
+//		EntityPlayer player = ((NetHandlerPlayServer) event.getHandler()).player;
+//		if (null == player) {
+//			return;
+//		}
+//		_serverPacket.offer(player);
+//		//ModLog.log().debug("end");
+//	}
 
 	@SubscribeEvent
 	public void tickEventServer(TickEvent.ServerTickEvent event) {
@@ -177,11 +166,10 @@ public class EventHook{
 		if (!TickEvent.Phase.END.equals(event.phase)) {
 			return;
 		}
-		EntityPlayer player = (EntityPlayer) _serverPacket.poll();
 		if (null == player) {
 			return;
 		}
-		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+		MinecraftServer server = player.getServer();
 		if (null == server) {
 			return;
 		}
@@ -195,37 +183,24 @@ public class EventHook{
 		//ModLog.log().debug("end");
 	}
 
-	protected void startPickup(World world, EntityPlayer player, List<Entity> list, boolean isThreadClient) {
-		//ModLog.log().debug("start");
-		WorldServer ws = (world instanceof WorldServer) ? (WorldServer) world : null;
-		for (Entity entity : list) {
-			if (!entity.isDead) {
-				if (isThreadClient) {
-					entity = ws.getEntityByID(entity.getEntityId());
-					if (null == entity) {}
-				} else {
-					ModLog.log().debug("onCollideWithPlayer");
-					entity.onCollideWithPlayer(player);
-				}
-			}
-		}
-		//ModLog.log().debug("end");
-	}
 
 	protected List<Entity> getEntitiesInCircumference(World world, EntityPlayer player) {
 		//ModLog.log().debug("start");
-		List<Entity> ret = new ArrayList();
-		if ( ConfigValue.DefaultMode != 0){
+		List<Entity> ret = new ArrayList<Entity>();
+		if ( ConfigValue.DefaultMode() != 0){
 			// あたり判定に引っかかったエンティティを取得
 			List<?> list = world.getEntitiesWithinAABBExcludingEntity(player,
-					player.getEntityBoundingBox().expand(ConfigValue.horizontal, ConfigValue.vertical, ConfigValue.horizontal).expand(-1*ConfigValue.horizontal, -1*ConfigValue.vertical, -1*ConfigValue.horizontal));
+					player.getBoundingBox().expand(ConfigValue.Horizontal(),
+							ConfigValue.Vertical(),
+							ConfigValue.Horizontal()).expand(-1*ConfigValue.Horizontal(),
+									-1*ConfigValue.Vertical(), -1*ConfigValue.Horizontal()));
 			if ((null == list) || (list.isEmpty())) {
 				return null;
 			}
 
 			for (Object o : list) {
 				Entity e = (Entity) o;
-				if (!e.isDead) {
+				if (!e.removed) {
 					boolean allow = false;
 					if ((e instanceof EntityXPOrb)){
 						// 経験値オーブは必ず拾う
@@ -246,20 +221,19 @@ public class EventHook{
 
 	// アイテムを拾うかどうか判定する
 	protected boolean CheckPickItem(EntityItem target){
-		if (ConfigValue.DefaultMode == 0){
+		if (ConfigValue.DefaultMode() == 0){
 			// ModOff状態なので必ず拾う
 			return true;
 		}else{
 			// リスト内のアイテムを無視
-			if (ConfigValue.DefaultMode == 1){
+			if (ConfigValue.DefaultMode() == 1){
 				// 無視リストが空なので必ず拾う
 				if (itemList == null){return true;}
 					// 一致する場合無視、一致しない場合許可
-					if(isIdInList(target.getItem().getItem().getRegistryName().toString())) return false;
-					else return true;
-				}
+				if(isIdInList(target.getItem().getItem().getRegistryName().toString())) return false;
+				else return true;
 				// リスト外のアイテムを無視
-			else{
+			}else{
 				// 無視リストが空なので必ず無視
 				if (itemList == null){return false;}
 				// 一致しない場合無視、一致する場合許可
@@ -281,5 +255,23 @@ public class EventHook{
 		}
 		//ModLog.log().debug("end");
 		return ret;
+	}
+
+
+	protected void startPickup(World world, EntityPlayer player, List<Entity> list, boolean isThreadClient) {
+		//ModLog.log().debug("start");
+		WorldServer ws = (world instanceof WorldServer) ? (WorldServer) world : null;
+		for (Entity entity : list) {
+			if (entity.isAlive()) {
+				if (isThreadClient) {
+					entity = ws.getEntityByID(entity.getEntityId());
+					if (null == entity) {}
+				} else {
+					ModLog.log().debug("onCollideWithPlayer");
+					entity.onCollideWithPlayer(player);
+				}
+			}
+		}
+		//ModLog.log().debug("end");
 	}
 }

@@ -1,14 +1,12 @@
 package basashi.autopic.core.log;
 
 
-import java.util.Locale;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.ThreadContext;
 
 import basashi.autopic.core.ModCommon;
-import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+
+
 
 
 public class ModLog {
@@ -16,8 +14,6 @@ public class ModLog {
 	private static final ModLog instance = new ModLog();
 	// ログインスタンス
 	private Logger _log;
-	// 紺フィギュア度
-	private boolean configured;
 
 	// ログインスタンスを取得する
 	public static ModLog log(){return instance;}
@@ -25,8 +21,6 @@ public class ModLog {
 	// コンストラクタ
 	private ModLog(){
 		_log = LogManager.getLogger(ModCommon.MOD_NAME);
-		ThreadContext.put("side", FMLLaunchHandler.side().name().toLowerCase(Locale.ENGLISH));
-		configured = true;
 	}
 
 	// 継続不可エラーログ
