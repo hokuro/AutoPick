@@ -1,6 +1,6 @@
-package basashi.autopic.network;
+package basashi.autopick.network;
 
-import basashi.autopic.core.ModCommon;
+import basashi.autopick.core.ModCommon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;

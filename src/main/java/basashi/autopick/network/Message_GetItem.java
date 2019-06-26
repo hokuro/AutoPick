@@ -1,7 +1,8 @@
-package basashi.autopic.network;
+package basashi.autopick.network;
+
 import java.util.function.Supplier;
 
-import basashi.autopic.event.EventHook;
+import basashi.autopick.event.EventHook;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 

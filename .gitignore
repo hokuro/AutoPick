@@ -2,3 +2,5 @@
 /*.launch
 /bin
 /run
+/.gradle
+/build

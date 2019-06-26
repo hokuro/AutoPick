@@ -1,12 +1,9 @@
-package basashi.autopic.core.log;
-
+package basashi.autopick.core.log;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import basashi.autopic.core.ModCommon;
-
-
+import basashi.autopick.core.ModCommon;
 
 
 public class ModLog {
