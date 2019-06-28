@@ -31,7 +31,6 @@ public class CommonProxy {
     	public static boolean Press_Key_Enable(){
     		return KEYBINDING_ENABLE.isPressed();
     	}
-
     }
 
     static class Server extends CommonProxy{

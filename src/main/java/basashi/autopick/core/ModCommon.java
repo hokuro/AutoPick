@@ -7,5 +7,5 @@ public final class ModCommon {
 	public static final String MOD_ID = "autopick";
 	// モッド名
 	public static final String MOD_NAME = "AutoPick";
-	public static final String CHANEL_NAME = "AutoPickUpMod";
+	public static final String CHANEL_NAME = "autopickupmod";
 }

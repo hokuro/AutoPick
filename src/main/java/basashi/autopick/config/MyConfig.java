@@ -29,7 +29,6 @@ public class MyConfig{
 	}
 
 	public static class General{
-
 		public final ForgeConfigSpec.ConfigValue<Integer> DefaultMode;
 		public final ForgeConfigSpec.ConfigValue<Double> vertical;
 		public final ForgeConfigSpec.ConfigValue<Double> horizontal;
