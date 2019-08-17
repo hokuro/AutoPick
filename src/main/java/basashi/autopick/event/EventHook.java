@@ -26,7 +26,6 @@ public class EventHook{
 	private long packetEnableTime = 0L;
 	private boolean countflag = false;
 	private int changeflag=0;
-	private int changeflag2=0;
 	private int count;
 
 	private static EntityPlayer entplayer = null;
