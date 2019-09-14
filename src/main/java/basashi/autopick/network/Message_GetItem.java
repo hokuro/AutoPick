@@ -28,7 +28,7 @@ public class Message_GetItem {
 		public static void handle(final Message_GetItem pkt, Supplier<NetworkEvent.Context> ctx)
 		{
 			ctx.get().enqueueWork(() -> {
-				EventHook.setEntityPlayer(ctx.get().getSender());
+				EventHook.setPlayerEntity(ctx.get().getSender());
 			});
 			ctx.get().setPacketHandled(true);
 		}

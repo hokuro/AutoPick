@@ -8,16 +8,16 @@ import basashi.autopick.core.CommonProxy;
 import basashi.autopick.core.log.ModLog;
 import basashi.autopick.network.MessageHundler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class EventHook{
 	public static final EventHook instance = new EventHook();
@@ -28,12 +28,12 @@ public class EventHook{
 	private int changeflag=0;
 	private int count;
 
-	private static EntityPlayer entplayer = null;
+	private static PlayerEntity entplayer = null;
 
 	private EventHook(){
 	}
 
-	public static void setEntityPlayer(EntityPlayer pl){
+	public static void setPlayerEntity(PlayerEntity pl){
 		entplayer = pl;
 	}
 
@@ -47,7 +47,7 @@ public class EventHook{
 		// ワールド情報、プレイヤー情報を取得
 		Minecraft minecraft = Minecraft.getInstance();
 		World world = minecraft.world;
-		EntityPlayerSP player = minecraft.player;
+		ClientPlayerEntity player = minecraft.player;
 		if (null == player) {
 			entplayer = null;
 			return;
@@ -116,7 +116,7 @@ public class EventHook{
 	}
 
 
-	protected List<Entity> getEntitiesInCircumference(World world, EntityPlayer player) {
+	protected List<Entity> getEntitiesInCircumference(World world, PlayerEntity player) {
 		//ModLog.log().debug("start");
 		List<Entity> ret = new ArrayList<Entity>();
 		if ( MyConfig.DefaultMode() != 0){
@@ -141,9 +141,9 @@ public class EventHook{
 		return ret.isEmpty() ? null : ret;
 	}
 
-	protected void startPickup(World world, EntityPlayer player, List<Entity> list, boolean isThreadClient) {
+	protected void startPickup(World world, PlayerEntity player, List<Entity> list, boolean isThreadClient) {
 		//ModLog.log().debug("start");
-		WorldServer ws = (world instanceof WorldServer) ? (WorldServer) world : null;
+		ServerWorld ws = (world instanceof ServerWorld) ? (ServerWorld) world : null;
 		for (Entity entity : list) {
 			if (entity.isAlive()) {
 				if (isThreadClient) {
